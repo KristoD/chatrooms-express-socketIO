@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chatrooms</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type ="text/javascript">
+        $(document).ready(function() {
+            var socket = io.connect();
+            var username = prompt('Username');
+            socket.emit('got_a_new_user', {username: username});
+            socket.on('new_user', function(data) {
+                $('body').append("<div id="+data.socket_id+">" + data.username + "</div>");
+            });
+            socket.on('disconnect_user', function(data) {
+                $("#" + data.socket_id).remove();
+                console.log(data.socket_id)
+            });
+            window.onbeforeunload = function() {
+                socket.disconnect();
+            }
+        });
+    </script>
+</head>
+<body>
+
+    <h1>Chatrooms</h1>
+    
+</body>
+</html>
